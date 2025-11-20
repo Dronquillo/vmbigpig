@@ -18,12 +18,7 @@ return new class extends Migration
             $table->string('direccion')->nullable();
             $table->string('telefono')->nullable();
             $table->string('correo')->unique();
-            $table->string('contacto')->nullable();
-            $table->string('tipo')->default('regular');
-            $table->date('fecha_registro')->nullable();
-            $table->decimal('limite_credito', 15, 2)->default(0);
-            $table->text('notas')->nullable();
-            $table->integer('plazo_credito')->default(0);   
+            $table->string('contacto')->nullable();  
             $table->string('estado')->default('activo');         
             $table->timestamps();
         });

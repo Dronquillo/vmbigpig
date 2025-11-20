@@ -9,4 +9,11 @@ class Producto extends Model
 {
     /** @use HasFactory<\Database\Factories\ProductoFactory> */
     use HasFactory;
+
+    public function image()
+    {
+        return $this->morphOne('App\Models\Image', 'imageable');
+    }
+    
+    
 }
