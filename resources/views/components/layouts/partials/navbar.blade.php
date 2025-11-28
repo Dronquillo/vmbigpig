@@ -5,7 +5,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Home</a>
+        <a href="#" class="nav-link">Inicio</a>
       </li>
 
     </ul>
@@ -29,7 +29,7 @@
       <li class="nav-item dropdown user-menu">
         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
           <img src="{{asset('dist/img/avatar5.png')}}" class="user-image img-circle elevation-2" alt="User Image">
-          <span class="d-none d-md-inline">Name</span>
+          <span class="d-none d-md-inline">Nombre</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
           <!-- User image -->
@@ -37,7 +37,7 @@
             <img src="{{asset('dist/img/avatar5.png')}}" class="img-circle elevation-2" alt="User Image">
   
             <p>
-              Name
+              Nombre
               <small>Cargo</small>
             </p>
           </li>
@@ -45,14 +45,14 @@
   
           <!-- Menu Footer-->
           <li class="user-footer">
-            <a class="btn btn-default btn-flat">Perfil</a>
+            <a href="{{route('user.show',auth()->user())}}" class="btn btn-default btn-flat">Perfil</a>
             <a class="btn btn-default btn-flat float-right" href="#"
             onclick="event.preventDefault();
                           document.getElementById('logout-form').submit();">
              Salir
          </a>
   
-         <form id="logout-form" action="#" method="POST" class="d-none">
+         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
              @csrf
          </form>
           </li>

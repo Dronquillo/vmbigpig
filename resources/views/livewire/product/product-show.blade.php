@@ -1,44 +1,31 @@
 <x-card cardTitle='Detalles de los Productos'>
-        <x-slot:cardTools>  
-            <a href="{{route('products')}}" class="btn btn-primary">
-                <i class="fas fa-arrow-circle-left"></i>  Regresar</a>
-        </x-slot>
-        
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <h2 class="profile-username text-center">{{$product->nombre}}</h2>
-                        <ul class="list-group list-group-unbordered mb-3">
-                            <li class="list-group-item"><b>Prouctos</b><a class="float-right">1,500</a></li>
-                            <li class="list-group-item"><b>Artiulos</b><a class="float-right">500</a></li>
-                        </ul>
+    <x-slot:cardTools>  
+        <a href="{{route('products')}}" class="btn btn-primary">
+            <i class="fas fa-arrow-circle-left"></i>  Regresar</a>
+    </x-slot>
+         
+    <div class="card card-solid">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-sm-5">
+                    <div class="col-12">
+                        <x-image :item="$product" size="400" class="product-image"/>
+                        <img src="{{$product->imagen}}" class="product-image" alt="Product Image">
+                    </div> 
+                    <div class="col-12 product-image-thumbs">
+                        <div class="product-image-thumbs">
 
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-7">
+                        <h3 class="my-3">{{ $product->nombre }}</h3>
+                        <p>{{$product->descripcion}}</p>
+                        
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Imagen</th>
-                            <th>Producto</th>
-                            <th>Precio</th>
-                            <th>Stock</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
+    </div>
 
 </x-card>

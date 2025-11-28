@@ -16,7 +16,7 @@
 </div>
 
 <div class="table-responsive">
-    <table {{ $attributes->merge(['class' => 'table table-bordered table-striped table-hover']) }}>
+    <table {{ $attributes->merge(['class' => 'table table-bordered table-striped table-hover text-center']) }}>
         @if (isset($thead))
             <thead>
                 <tr>

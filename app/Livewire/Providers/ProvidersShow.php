@@ -17,5 +17,5 @@ class ProvidersShow extends Component
     {
         return view('livewire.providers.providers-show');
     }
-
+ 
 }

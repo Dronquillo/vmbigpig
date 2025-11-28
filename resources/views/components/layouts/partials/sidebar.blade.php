@@ -62,6 +62,16 @@
                 </p>
               </a>
           </li>
+
+          <!-- Compras a proveedores -->          
+          <li class="nav-item">
+              <a href="{{route('compras')}}" class="nav-link">
+                <i class="nav-icon fas fa-store-alt"></i>
+                <p>
+                  Compra a Proveedor
+                </p>
+              </a>
+          </li>          
           
           <!-- Categoria de activos -->          
           <li class="nav-item">
@@ -103,6 +113,15 @@
               </a>
           </li>
 
+          <!-- Usuarios -->          
+          <li class="nav-item">
+              <a href="{{route('users')}}" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p> 
+                  Usuarios
+                </p>
+              </a>
+          </li>
 
         </ul>
       </nav>

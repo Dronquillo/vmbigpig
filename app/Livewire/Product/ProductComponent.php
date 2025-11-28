@@ -13,7 +13,7 @@ use Livewire\WithFileUploads;
 #[Title('Productos')]
 class ProductComponent extends Component
 {
-
+ 
     use WithPagination;
     use WithFileUploads;
 
@@ -23,8 +23,8 @@ class ProductComponent extends Component
     public $cant=5;
     
     //propiedades modelo
+    public $Id=0;    
     public $nombre;
-    public $Id;
     public $categoria_id;
     public $descripcion;
     public $precio;
@@ -63,9 +63,20 @@ class ProductComponent extends Component
     public function create()
     {
         $this->Id = 0;
-        
         $this->reset(['nombre']);
+        $this->reset(['descripcion']);
+        $this->reset(['precio']);
+        $this->reset(['costo']);
+        $this->reset(['codigo_barras']);
+        $this->reset(['stock']);
+        $this->reset(['stock_minimo']);
+        $this->reset(['fecha_vencimiento']);
+        $this->reset(['categoria_id']);
+        $this->reset(['con_iva']);
+        $this->reset(['estado']);
+        $this->reset(['imagen']);
         $this->resetErrorBag();
+        
         $this->dispatch('open-modal','modalProduct');
         
     }
@@ -86,12 +97,6 @@ class ProductComponent extends Component
 
         $this->validate($rules);
 
-        if($this->imagen){
-            //$imagePath = $this->imagen->store('products','public');
-            $customName = 'products/'.uniqid().'.'.$this->imagen->extension();
-            $this->imagen->storeAs('public', $customName);
-        }
-
         //crear producto
         $product = new Product();
         $product->nombre = $this->nombre;
@@ -107,6 +112,12 @@ class ProductComponent extends Component
         $product->estado = $this->estado;
         $product->imagen = $this->imagen;
         $product->save();
+
+        if($this->imagen){
+            //$imagePath = $this->imagen->store('products','public');
+            $customName = 'products/'.uniqid().'.'.$this->imagen->extension();
+            $this->imagen->storeAs('public', $customName);
+        }
 
         //actualizar total registros
         $this->totalRegistros = Product::count();
@@ -128,6 +139,7 @@ class ProductComponent extends Component
         //cerrar modal via browser event
         $this->dispatch('close-modal','modalProduct');
         $this->dispatch('msg','Producto creado exitosamente');
+        $this->clean();
 
     }    
 
@@ -179,9 +191,18 @@ class ProductComponent extends Component
         $this->dispatch('close-modal','modalProduct');
         $this->dispatch('msg','Producto actualizado exitosamente');
 
-        $this->reset(['nombre','descripcion','precio','costo','codigo_barras','stock','stock_minimo','fecha_vencimiento','categoria_id','con_iva','estado','imagen']);
+        $this->clean();
 
     }
+
+    public function clean()
+    {
+        $this->reset(['nombre','descripcion','precio','costo','codigo_barras','stock','stock_minimo','fecha_vencimiento','categoria_id','con_iva','estado','imagen']);
+        $this->resetPage();
+    }
+
+
+
 
     #[On('destroyProduct')]
     public function destroyProduct($id)
