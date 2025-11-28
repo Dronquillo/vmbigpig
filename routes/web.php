@@ -14,6 +14,8 @@ use App\Livewire\Measurement\MeasurementComponent;
 use App\Livewire\Measurement\MeasurementShow;
 use App\LIvewire\Farms\FarmComponent;
 use App\LIvewire\Farms\FarmsShow;
+use App\Livewire\User\UserComponent;
+use App\LIvewire\User\UserShow;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Home\Inicio;
 
@@ -49,3 +51,5 @@ Route::get('/medidas/show/{measurement}', MeasurementShow::class)->name('measure
 Route::get('/farms', FarmComponent::class)->name('farms');
 Route::get('/farms/show/{farm}', FarmsShow::class)->name('farms.show');
 
+Route::get('/usuarios', UserComponent::class)->name('users');
+Route::get('/usuarios/show/{user}', UserShow::class)->name('users.show');

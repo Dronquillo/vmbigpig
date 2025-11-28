@@ -65,7 +65,19 @@ class ProductComponent extends Component
         $this->Id = 0;
         
         $this->reset(['nombre']);
+        $this->reset(['descripcion']);
+        $this->reset(['precio']);
+        $this->reset(['costo']);
+        $this->reset(['codigo_barras']);
+        $this->reset(['stock']);
+        $this->reset(['stock_minimo']);
+        $this->reset(['fecha_vencimiento']);
+        $this->reset(['categoria_id']);
+        $this->reset(['con_iva']);
+        $this->reset(['estado']);
+        $this->reset(['imagen']);
         $this->resetErrorBag();
+        
         $this->dispatch('open-modal','modalProduct');
         
     }
