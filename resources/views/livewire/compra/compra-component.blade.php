@@ -29,11 +29,8 @@
                     <td>{{$compra->total}}</td>
                     <td>{{$compra->estado}}</td>
                     <td>
-                        
-                        <a href="{{route('compra.show',$compra)}}" class="btn btn-sm btn-success" title="Ver"><i class="far fa-eye"></i></a>
+                        <a href="{{route('compra.show',$compra->id)}}" class="btn btn-sm btn-success" title="Ver"><i class="far fa-eye"></i></a>
                         <a href="#" wire:click='edit({{$compra->id}})' class="btn btn-sm btn-info" title="Editar"><i class="far fa-edit"></i></a>
-                        <a wire.click="$dispatch('delete',{id: {{$compra->id}}, eventName:'destroyFarms'})" class="btn btn-sm btn-danger" title="Eliminar"><i class="far fa-trash-alt"></i></a>
-
                     </td>
                 </tr>
             @empty

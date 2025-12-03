@@ -2,7 +2,6 @@
     <form wire:submit={{$Id==0 ? "store" : "update($Id)"}}>
 
         <div class="form-row">
-            <h2 class="mb-4">Registro de Compras 🐖</h2>
 
             <div class="form-group col-md-12">
                 <label for="fecha">Fecha</label>
@@ -91,15 +90,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($detalles as $d)
+                            @foreach($detalles as $index => $d)
                                 <tr>
-                                    <td>{{ $d['producto_id'] }}</td>
-                                    <td>{{ $d['cantidad'] }}</td>
-                                    <td>{{ $d['precio_compra'] }}</td>
-                                    <td>{{ $d['porc_iva']}}</td>
-                                    <td>{{ $d['descuento'] }}</td>
+                                    <td>
+                                        <select wire:model="detalles.{{ $index }}.producto_id" class="form-control">
+                                            @foreach($productos as $producto)
+                                                <option value="{{ $producto->id }}">{{ $producto->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td><input type="number" wire:model="detalles.{{ $index }}.cantidad" class="form-control"></td>
+                                    <td><input type="number" wire:model="detalles.{{ $index }}.precio_compra" step="0.01" class="form-control"></td>
+                                    <td><input type="number" wire:model="detalles.{{ $index }}.porc_iva" class="form-control"></td>
+                                    <td><input type="number" wire:model="detalles.{{ $index }}.descuento" step="0.01" class="form-control"></td>
                                     <td>{{ $d['iva'] }}</td>
                                     <td>{{ $d['subtotal'] }}</td>
+                                    <td>
+                                        <button type="button" wire:click="removeDetalle({{ $index }})" class="btn btn-danger btn-sm">Eliminar</button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -108,13 +116,27 @@
             </div>
 
             {{-- Totales --}}
-            <div class="card mb-4">
-                <div class="card-header bg-warning">Totales</div>
+            <div class="card mb-4 shadow">
+                <div class="card-header bg-warning font-weight-bold">Totales</div>
                 <div class="card-body">
-                    <p><strong>Subtotal:</strong> {{ $subtotal }}</p>
-                    <p><strong>Descuento:</strong> {{ $descuento }}</p>
-                    <p><strong>IVA:</strong> {{ $iva }}</p>
-                    <p><strong>Total:</strong> {{ $total }}</p>
+                    <div class="row text-center">
+                        <div class="col">
+                            <span class="badge badge-secondary">Subtotal</span>
+                            <h6>{{ number_format($subtotal, 2) }}</h6>
+                        </div>
+                        <div class="col">
+                            <span class="badge badge-danger">Descuento</span>
+                            <h6>-{{ number_format($descuento, 2) }}</h6>
+                        </div>
+                        <div class="col">
+                            <span class="badge badge-info">IVA</span>
+                            <h6>{{ number_format($iva, 2) }}</h6>
+                        </div>
+                        <div class="col">
+                            <span class="badge badge-success">Total</span>
+                            <h5 class="font-weight-bold">{{ number_format($total, 2) }}</h5>
+                        </div>
+                    </div>
                 </div>
             </div>
 

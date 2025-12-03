@@ -58,6 +58,13 @@ class CompraComponent extends Component
             'empresas' => $this->empresas,
             'productos' => $this->productos,
         ]);
+
+    }
+
+    public function create()
+    {
+        $this->resetFormulario();
+        $this->dispatch('open-modal','modalCompra');
     }
 
     // 🔹 Reset de formulario
@@ -71,12 +78,6 @@ class CompraComponent extends Component
             'producto_id','cantidad','precio_compra','detalle_descuento','detalle_iva','porc_ivas'
         ]);
         $this->resetErrorBag();
-    }
-
-    public function create()
-    {
-        $this->resetFormulario();
-        $this->dispatch('open-modal','modalCompra');
     }
 
     // 🔹 Validación
@@ -110,6 +111,7 @@ class CompraComponent extends Component
         $this->totalRegistros = Compra::count();
         $this->dispatch('close-modal','modalCompra');
         $this->dispatch('msg','Compra creada exitosamente');
+
     }
 
     // 🔹 Calcular detalle temporal
@@ -138,13 +140,28 @@ class CompraComponent extends Component
     // 🔹 Agregar detalle
     public function addDetalle()
     {
-        $detalle = $this->calcularDetalle();
-        if ($detalle) {
-            $this->detalles[] = $detalle;
-            $this->reset(['producto_id','cantidad','precio_compra','detalle_descuento','detalle_iva', 'porc_ivas']);
-            $this->calcularTotales();
-        }
+        $this->detalles[] = [
+            'producto_id'   => $this->producto_id,
+            'cantidad'      => $this->cantidad,
+            'precio_compra' => $this->precio_compra,
+            'porc_iva'      => $this->porc_ivas,
+            'descuento'     => $this->detalle_descuento,
+            'iva'           => $this->calcularIva($this->precio_compra, $this->cantidad, $this->porc_ivas),
+            'subtotal'      => $this->calcularSubtotal($this->precio_compra, $this->cantidad, $this->detalle_descuento),
+        ];
 
+        $this->reset(['producto_id','cantidad','precio_compra','detalle_descuento','porc_ivas']);
+        $this->calcularTotales();
+    }    
+
+    private function calcularIva($precio, $cantidad, $porc)
+    {
+        return (($precio * $cantidad) * $porc) / 100;
+    }
+
+    private function calcularSubtotal($precio, $cantidad, $descuento)
+    {
+        return ($precio * $cantidad) - $descuento;
     }
 
     // 🔹 Totales
@@ -199,6 +216,83 @@ class CompraComponent extends Component
     {
         $this->calcularDetalle();
     }
+
+    public function edit(Compra $compra)
+    {
+
+        $this->Id = $compra->id;
+        $this->proveedor_id   = $compra->proveedor_id;
+        $this->nombre         = $compra->nombre;
+        $this->numero_factura = $compra->numero_factura;
+        $this->empresa_id     = $compra->empresa_id;
+        $this->fecha          = $compra->fecha;
+        $this->subtotal       = $compra->subtotal; 
+        $this->descuento      = $compra->descuento;
+        $this->porc_iva       = $compra->porc_iva;
+        $this->iva            = $compra->iva;
+        $this->total          = $compra->total;
+        $this->estado         = $compra->estado;
+
+        // Cargar detalles en arreglo
+        $this->detalles = $compra->detalles->map(function($d) {
+            return [
+                'producto_id'   => $d->producto_id,
+                'cantidad'      => $d->cantidad,
+                'precio_compra' => $d->precio_compra,
+                'porc_iva'      => $d->porc_iva,
+                'descuento'     => $d->descuento,
+                'iva'           => $d->iva,
+                'subtotal'      => $d->subtotal,
+            ];
+        })->toArray();
+
+        $this->dispatch('open-modal','modalCompra');
+
+    }
+
+    public function update($id)
+    {
+        
+        $this->validate();
+
+        $compra = Compra::findOrFail($id);
+
+        $compra->update($this->only([
+            'proveedor_id','nombre','numero_factura','empresa_id','fecha',
+            'subtotal','descuento','porc_iva','iva','total','estado'
+        ]));
+
+        // Actualizar detalles: primero limpiar, luego insertar
+        $compra->detalles()->delete();
+
+        foreach ($this->detalles as $d) {
+            $compra->detalles()->create($d);
+        }
+
+        //cerrar modal via browser event
+        $this->dispatch('close-modal','modalCompra');
+        $this->dispatch('msg','Compra editada exitosamente');
+
+        $this->resetFormulario();
+
+    } 
+
+    public function updatedDetalles()
+    {
+        $this->subtotal = collect($this->detalles)->sum('subtotal');
+        $this->descuento = collect($this->detalles)->sum('descuento');
+        $this->iva = collect($this->detalles)->sum('iva');
+        $this->total = $this->subtotal - $this->descuento + $this->iva;
+    }
+
+    public function removeDetalle($index)
+    {
+        unset($this->detalles[$index]);
+        $this->detalles = array_values($this->detalles); // reindexar
+    }    
+
+
+
 
 }
 

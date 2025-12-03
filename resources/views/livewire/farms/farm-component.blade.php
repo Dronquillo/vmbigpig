@@ -34,11 +34,7 @@
                     <td>{{$activovivo->empresa_id}}</td>
                     <td>{{$activovivo->estado}}</td>
                     <td>
-                        
-                        <a href="{{route('farms.show',$activovivo)}}" class="btn btn-sm btn-success" title="Ver"><i class="far fa-eye"></i></a>
                         <a href="#" wire:click='edit({{$activovivo->id}})' class="btn btn-sm btn-info" title="Editar"><i class="far fa-edit"></i></a>
-                        <a wire.click="$dispatch('delete',{id: {{$activovivo->id}}, eventName:'destroyFarms'})" class="btn btn-sm btn-danger" title="Eliminar"><i class="far fa-trash-alt"></i></a>
-
                     </td>
                 </tr>
             @empty

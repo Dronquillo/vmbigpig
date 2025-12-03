@@ -24,9 +24,7 @@
                     <td>{{$enterprise->telefono}}</td>
                     <td>{{$enterprise->correo}}</td>
                     <td>
-                        <a href="{{route('eterprise.show',$enterprise)}}" class="btn btn-sm btn-success" title="Ver"><i class="far fa-eye"></i></a>
                         <a href="#" wire:click='edit({{$enterprise->id}})' class="btn btn-sm btn-info" title="Editar"><i class="far fa-edit"></i></a>
-                        <a wire.click="$dispatch('delete',{id: {{$enterprise->id}}, eventName:'destroyCategory'})" class="btn btn-sm btn-danger" title="Eliminar"><i class="far fa-trash-alt"></i></a>
                     </td>
                 </tr>
             @empty

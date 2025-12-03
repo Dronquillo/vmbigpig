@@ -57,5 +57,5 @@ Route::get('/usuarios', UserComponent::class)->name('users')->middleware(['auth'
 Route::get('/usuarios/show/{user}', UserShow::class)->name('user.show')->middleware(['auth']);
 
 Route::get('/compras', CompraComponent::class)->name('compras')->middleware(['auth']);
-Route::get('/compras/show/{compra}', CompraShow::class)->name('compra.show')->middleware(['auth']);
+Route::get('/compras/show/{id}', CompraShow::class)->name('compra.show')->middleware(['auth']);
 

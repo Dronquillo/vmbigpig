@@ -28,11 +28,8 @@
                     <td>{{$provider->contacto}}</td>
                     <td>{{$provider->estado}}</td>
                     <td>
-                        
                         <a href="{{route('providers.show',$provider)}}" class="btn btn-sm btn-success" title="Ver"><i class="far fa-eye"></i></a>
                         <a href="#" wire:click='edit({{$provider->id}})' class="btn btn-sm btn-info" title="Editar"><i class="far fa-edit"></i></a>
-                        <a wire.click="$dispatch('delete',{id: {{$provider->id}}, eventName:'destroyFarms'})" class="btn btn-sm btn-danger" title="Eliminar"><i class="far fa-trash-alt"></i></a>
-
                     </td>
                 </tr>
             @empty
