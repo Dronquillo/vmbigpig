@@ -7,6 +7,7 @@ use Livewire\Component;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\On;
 use App\Models\Activovivo;
+
 //Traer las tablas de categorias, medidas y empresas
 use App\Models\CategoriaActivo as Categoactivo;
 use App\Models\TablaMedida as Measurement;

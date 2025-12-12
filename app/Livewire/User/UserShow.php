@@ -15,9 +15,8 @@ class UserShow extends Component
 
     public function render()
     {
-        
-        return view('livewire.user.user-show');
 
+        return view('livewire.user.user-show');
     }
 
 }

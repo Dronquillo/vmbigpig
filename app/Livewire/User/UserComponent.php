@@ -157,6 +157,19 @@ class UserComponent extends Component
 
     }    
 
+    #[On('destroyUser')]
+    public function destroy($id){
+        $user = User::findOrfail($id);
+        if($user->image!=null){
+            Storage::delete('public/'.$user->image->url);
+            $user->image()->delete();
+        }
+
+        $user->delete();
+
+        $this->dispatch('msg', 'Usuario eliminado correctamente');
+
+    }
 
     public function limpiar(){
 

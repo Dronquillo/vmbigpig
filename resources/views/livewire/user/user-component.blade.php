@@ -47,3 +47,4 @@
     @include('livewire.user.modal')
 
 </div>
+

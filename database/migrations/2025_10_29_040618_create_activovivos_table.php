@@ -31,6 +31,7 @@ return new class extends Migration
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->string('estado')->default('activo');
+            $table->foreignId('lot_id')->nullable()->constrained('lots')->onDelete('cascade');
             $table->timestamps();
         });
     }

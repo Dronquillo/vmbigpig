@@ -121,12 +121,6 @@
                     @enderror
                 </div>
 
-                <div class="form-group col-md-6">
-                    @if ($this->imagen)
-                        <img src="{{$imagen->temporaryUrl()}}" class="rounded float-right" width="200">
-                    @endif
-                </div>
-
             </div>
 
             <button wire:loading.attr="disabled" class="btn btn-primary float-right">{{$Id==0 ? "Guardar Producto" : "Editar Producto"}}</button>
