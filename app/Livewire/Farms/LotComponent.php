@@ -51,3 +51,4 @@ class LotComponent extends Component
     }
 
 }
+

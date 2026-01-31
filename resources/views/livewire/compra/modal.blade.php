@@ -11,6 +11,7 @@
             <div class="form-group col-md-4">
                 <label for="proveedor_id">Proveedor: </label>
                 <select wire:model='proveedor_id' class='form-control'>
+                    <option value="">-- Seleccione un proveedor --</option>
                     @foreach($proveedores as $proveedor)
                         <option value="{{$proveedor->id}}">{{$proveedor->ruc.'-'.$proveedor->nombre}}</option>
                     @endforeach
@@ -22,10 +23,9 @@
 
             <div class="form-group col-md-8">
                 <label for="nombre">Nombre Proveedor: </label>
-                <input type="text" class="form-control" value="{{ $nombre }}" readonly>
+                <input type="text" id="nombre" class="form-control" value="{{ $nombre }}" readonly>
             </div>
-
-            
+           
             <div class="form-group col-md-4">
                 <label for="numero_factura">Número de Factura: </label>
                 <input type="text" wire:model="numero_factura" class="form-control" name="numero_factura" id="numero_factura">
@@ -38,6 +38,7 @@
                 <label for="empresa_id">Empresa: </label>
                 
                 <select wire:model='empresa_id' class='form-control'>
+                    <option value="">-- Seleccione una Empresa --</option>
                     @foreach($empresas as $empresa)
                         <option value="{{$empresa->id}}">{{$empresa->nombre}}</option>
                     @endforeach
@@ -55,14 +56,22 @@
                 @enderror
             </div>            
 
-
             {{-- Detalle --}}
             <div class="card mb-4">
                 <div class="card-header bg-info text-white">Detalle de Productos</div>
                 <div class="card-body">
                     <div class="form-row">
+                        <div class="col font-weight-bold">Producto</div>
+                        <div class="col font-weight-bold">Cantidad</div>
+                        <div class="col font-weight-bold">Precio</div>
+                        <div class="col font-weight-bold">% IVA</div>
+                        <div class="col font-weight-bold">Descuento</div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="form-row">
                         <div class="col">
                             <select wire:model="producto_id" class="form-control">
+                                <option value="">-- Seleccione un item --</option>
                                 @foreach($productos as $producto)
                                     <option value="{{$producto->id}}">{{$producto->nombre}}</option>
                                 @endforeach
@@ -70,7 +79,7 @@
                         </div>
                         <div class="col"><input type="number" wire:model="cantidad" placeholder="Cantidad" class="form-control"></div>
                         <div class="col"><input type="number" wire:model="precio_compra" step="0.01" placeholder="Precio" class="form-control"></div>
-                        <div class="col"><input type="numbre" wire:model="porc_ivas" placeholder="% IVA" class="form-control"></div>
+                        <div class="col"><input type="number" wire:model="porc_ivas" placeholder="% IVA" class="form-control"></div>
                         <div class="col"><input type="number" wire:model="detalle_descuento" step="0.01" placeholder="Descuento" class="form-control"></div>
                         <div class="col">
                             <button type="button" wire:click="addDetalle" class="btn btn-primary">Agregar</button>
@@ -101,7 +110,7 @@
                                     </td>
                                     <td><input type="number" wire:model="detalles.{{ $index }}.cantidad" class="form-control"></td>
                                     <td><input type="number" wire:model="detalles.{{ $index }}.precio_compra" step="0.01" class="form-control"></td>
-                                    <td><input type="number" wire:model="detalles.{{ $index }}.porc_iva" class="form-control"></td>
+                                    <td><input type="number" wire:model="detalles.{{ $index }}.porc_ivas" class="form-control"></td>
                                     <td><input type="number" wire:model="detalles.{{ $index }}.descuento" step="0.01" class="form-control"></td>
                                     <td>{{ $d['iva'] }}</td>
                                     <td>{{ $d['subtotal'] }}</td>

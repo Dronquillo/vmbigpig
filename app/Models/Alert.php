@@ -9,6 +9,8 @@ class Alert extends Model
 {
     use HasFactory;
 
+    protected $table = 'alerts';
+
     protected $fillable = [
         'type',
         'level',
@@ -27,4 +29,5 @@ class Alert extends Model
     {
         return $this->morphTo();
     }
+
 }

@@ -11,24 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tabla_partos', function (Blueprint $table) {
-            $table->id();
-            $table->date('fecha');
-            $table->unsignedBigInteger('id_activo');
-            $table->foreign('id_activo')->references('id')->on('activovivos')->onDelete('cascade');
-            $table->integer('numero_camada');
-            $table->date('fecha_servicio');
-            $table->time('hora_servicio');
-            $table->string('reproductor');
-            $table->date('fecha_parto');
-            $table->time('hora_parto');
-            $table->unsignedBigInteger('id_personal');
-            $table->foreign('id_personal')->references('id')->on('personals')->onDelete('cascade');
-            $table->integer('numero_crias');
-            $table->string('observaciones')->nullable();
-            $table->string('estado')->default('activo');
-            $table->timestamps();
-            
+
+        Schema::create('tabla_partos', function (Blueprint $table) { 
+            $table->id();  
+            $table->foreignId('id_activo')->constrained('activovivos')->cascadeOnDelete(); 
+            $table->integer('numero_camada')->nullable(); 
+            $table->string('reproductor')->nullable(); 
+            $table->date('fecha_parto'); 
+            $table->time('hora_parto')->nullable(); 
+            $table->foreignId('id_personal')->constrained('personals')->cascadeOnDelete(); 
+            $table->integer('numero_crias'); 
+            $table->string('observaciones')->nullable(); 
+            $table->string('estado')->default('activo'); 
+            $table->timestamps(); 
+            $table->index(['id_activo', 'fecha_parto']); 
         });
     }
 

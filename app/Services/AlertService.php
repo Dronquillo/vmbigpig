@@ -1,9 +1,8 @@
 <?php 
 
-// app/Services/AlertService.php
 namespace App\Services;
 
-use App\Models\alerts_and_audit_logs as Alert;
+use App\Models\Alert;
 
 class AlertService {
     public static function weightStall(int $lotId, float $adg, float $threshold = 0.6): void {

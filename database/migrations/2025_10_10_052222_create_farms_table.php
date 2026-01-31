@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('farms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code')->unique();
-            $table->string('location')->nullable();            
+            $table->string('location')->nullable();
+            $table->string('owner')->nullable();
+            $table->string('estado')->default('activo'); // activo, inactivo
             $table->timestamps();
         });
     }

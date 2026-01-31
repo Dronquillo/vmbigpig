@@ -4,7 +4,7 @@ namespace App\Livewire\Feeding;
 
 use Livewire\Component;
 use Livewire\Attributes\Title;
-use App\Models\lots as Lot;
+use App\Models\lots as Lote;
 use App\Models\feeding_plans as FeedingPlan;
 use App\Models\feeding_events as FeedingEvent;
 use App\Models\ActivoVivo;
@@ -23,21 +23,20 @@ class FeedingDashboard extends Component
     public $costTotal = 0.0;
     public $actualKg = 0.0;
     public $wasteKg = 0.0;
-    public $lots = [];
+    public $lotes = [];
     public $costPerKg = 0.0;
     public $pigxKg = 0.0;
-    ////
 
-
-    
     public $selectedLot, $selectedPig, $selectedProduct;
     public $cantidad = 0, $costo = 0;
     public $pigs = [], $products = [], $events = [];
 
     public function mount()
     {
-        $this->lots = Lot::active()->get();
+        $this->lotes = Lote::all();
         $this->products = Producto::all();
+        $this->pigs = ActivoVivo::All();
+
         $this->events = FeedingEvent::with('lot','pig')->latest()->take(20)->get();
 
     }
@@ -60,18 +59,18 @@ class FeedingDashboard extends Component
 
     public function updatedSelectedLot($id)
     {
-        $lot = Lot::find($id);
-        if (!$lot) { $this->resetCalc(); return; }
+        $lotes = Lote::find($id);
+        if (!$lotes) { $this->resetCalc(); return; }
 
-        $this->day = $lot->dayOfCycle();
-        $this->plan = FeedingPlan::where('lot_id',$lot->id)
+        $this->day = $lotes->dayOfCycle();
+        $this->plan = FeedingPlan::where('lot_id',$lotes->id)
             ->where('day_from','<=',$this->day)->where('day_to','>=',$this->day)->first();
 
         // cargar cerdos del lote
-        $this->pigs = ActivoVivo::where('lot_id',$lot->id)->get();
+        $this->pigs = ActivoVivo::where('lot_id',$lotes->id)->get();
 
         if ($this->plan && $this->plan->feedFormula) {
-            $calc = FeedingCalculator::targetForLot($lot, $this->plan->feedFormula, (float)$this->plan->ration_per_pig_kg);
+            $calc = FeedingCalculator::targetForLot($lotes, $this->plan->feedFormula, (float)$this->plan->ration_per_pig_kg);
             $this->targetKg = $calc['targetKg'];
             $this->composition = $calc['composition'];
             $this->costTotal = $calc['costTotal'];
@@ -134,7 +133,7 @@ class FeedingDashboard extends Component
     public function render()
     {
         return view('livewire.feeding.feeding-dashboard', [
-            'lots' => Lot::active()->orderByDesc('id')->get(),
+            'lots' => Lote::All(),
             'pigs' => ActivoVivo::where('lot_id',$this->selectedLot)->get(),
         ]);
     }

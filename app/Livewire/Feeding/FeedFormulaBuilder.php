@@ -9,8 +9,10 @@ use Livewire\Component;
 
 class FeedFormulaBuilder extends Component
 {
+    
     public function render()
     {
         return view('livewire.feeding.feed-formula-builder');
     }
+
 }

@@ -1,57 +1,75 @@
 <div>
-    <x-card cardTitle='Gestion de Cerdos ({{$this->totalRegistros}})' >
-        <x-slot:cardTools>  
+    <x-card cardTitle='Gestión de Granjas ({{$this->totalRegistros}})'>
+        <x-slot:cardTools>
             <a href="#" class="btn btn-primary" wire:click='create'>
-                <i class="fas fa-plus-circle"></i>  Crear Cerdo</a>
-        </x-slot>
-        
+                <i class="fas fa-plus-circle"></i> Crear Granja
+            </a>
+        </x-slot:cardTools>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Buscar por nombre/ubicación" wire:model.debounce.500ms="search">
+            </div>
+        </div>
+
         <x-table>
             <x-slot:thead>
                 <th>Id</th>
-                <th>Codigo</th>
-                <th>Nombres</th>
-                <th>Fecha Nace</th>
-                <th>Hora Nace</th>
-                <th># Camada</th>
-                <th>Raza</th>
-                <th>Genero</th>
-                <th>Peso Kg</th>
-                <th>Empresa</th>
+                <th>Nombre</th>
+                <th>Ubicación</th>
+                <th>Responsable</th>
                 <th>Estado</th>
                 <th>Acciones</th>
-            </x-slot>
-            @forelse($activovivos as $activovivo)
+            </x-slot:thead>
+
+            @forelse($farms as $farm)
                 <tr>
-                    <td>{{$activovivo->id}}</td>
-                    <td>{{$activovivo->codigo}}</td>
-                    <td>{{$activovivo->nombre}}</td>
-                    <td>{{$activovivo->fecha_nacemiento}}</td>
-                    <td>{{$activovivo->hora_nacimiento}}</td>
-                    <td>{{$activovivo->numero_camada}}</td>
-                    <td>{{$activovivo->raza}}</td>
-                    <td>{{$activovivo->genero}}</td>
-                    <td>{{$activovivo->peso}}</td>
-                    <td>{{$activovivo->empresa_id}}</td>
-                    <td>{{$activovivo->estado}}</td>
+                    <td>{{ $farm->id }}</td>
+                    <td>{{ $farm->name }}</td>
+                    <td>{{ $farm->location }}</td>
+                    <td>{{ $farm->owner }}</td>
+                    <td>{{ $farm->estado }}</td>
                     <td>
-                        <a href="#" wire:click='edit({{$activovivo->id}})' class="btn btn-sm btn-info" title="Editar"><i class="far fa-edit"></i></a>
+                        <a href="#" wire:click='edit({{ $farm->id }})' class="btn btn-sm btn-info"><i class="far fa-edit"></i></a>
                     </td>
                 </tr>
             @empty
-                <tr>
-                    <td colspan="12">No hay registros</td>
-                </tr>
+                <tr><td colspan="6">No hay registros</td></tr>
             @endforelse
-
         </x-table>
 
         <x-slot:cardFooter>
-            {{$activovivos->links()}}
+            {{ $farms->links() }}
         </x-slot:cardFooter>
-
     </x-card>
 
-    @include('livewire.farms.modal')
-
-
+    <x-modal modalId="modalFarm" modalTitle="Granja">
+        <form wire:submit={{ $Id==0 ? "store" : "update($Id)" }}>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" wire:model="name" placeholder="Nombre de la granja">
+                    @error('name') <div class="alert alert-danger mt-2">{{ $message }}</div> @enderror
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Ubicación</label>
+                    <input type="text" class="form-control" wire:model="location" placeholder="Ubicación">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Responsable</label>
+                    <input type="text" class="form-control" wire:model="owner" placeholder="Responsable">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Estado</label>
+                    <select class="form-control" wire:model="estado">
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success float-right">
+                {{ $Id==0 ? "Guardar Granja" : "Editar Granja" }}
+            </button>
+        </form>
+    </x-modal>
 </div>

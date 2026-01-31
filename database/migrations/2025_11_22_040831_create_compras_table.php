@@ -17,14 +17,15 @@ return new class extends Migration
             $table->unsignedBigInteger('proveedor_id');
             $table->foreign('proveedor_id')->references('id')->on('proveedors')->onDelete('cascade');
             $table->string('nombre');
-            $table->string('numero_factura')->unique();
+            $table->string('numero_factura');
             $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->decimal('porc_iva', 10, 2)->default(15);
             $table->decimal('subtotal', 10, 2)->default(0);
             $table->decimal('descuento', 10, 2)->default(0);
             $table->decimal('iva', 10, 2)->default(0);
-            $table->decimal('total', 10, 2)->default(0);            
+            $table->decimal('total', 10, 2)->default(0); 
+            $table->string('estado')->default('PENDIENTE');           
             $table->timestamps();
         });
     }

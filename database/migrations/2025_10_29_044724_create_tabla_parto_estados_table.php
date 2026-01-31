@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tabla_parto_estados', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('id_parto');
-            $table->foreign('id_parto')->references('id')->on('tabla_partos')->onDelete('cascade');
-            $table->integer('numero_camada');
-            $table->string('genero')->default('masculino');
-            $table->string('estado')->default('vivo');
-            $table->string('observaciones')->nullable();
-            $table->timestamps();
+
+        Schema::create('tabla_parto_estados', function (Blueprint $table) { 
+            $table->id(); 
+            $table->foreignId('id_parto')->constrained('tabla_partos')->cascadeOnDelete(); 
+            $table->integer('numero_camada'); 
+            $table->string('genero')->default('masculino'); 
+            $table->string('estado')->default('vivo'); // vivo|muerto 
+            $table->string('observaciones')->nullable(); 
+            $table->timestamps(); 
+            $table->index(['id_parto', 'numero_camada']); 
         });
+        
     }
 
     /**

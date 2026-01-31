@@ -53,10 +53,10 @@ class CompraComponent extends Component
             ->paginate($this->perPage);
 
         return view('livewire.compra.compra-component', [
-            'compras' => $compras,
+            'compras'     => $compras,
             'proveedores' => $this->proveedores,
-            'empresas' => $this->empresas,
-            'productos' => $this->productos,
+            'empresas'    => $this->empresas,
+            'productos'   => $this->productos,
         ]);
 
     }
@@ -75,7 +75,7 @@ class CompraComponent extends Component
             'fecha','proveedor_id','nombre','numero_factura',
             'subtotal','descuento','porc_iva','iva','total',
             'empresa_id','estado','detalles',
-            'producto_id','cantidad','precio_compra','detalle_descuento','detalle_iva','porc_ivas'
+            'producto_id','cantidad','precio_compra','detalle_descuento','iva','porc_ivas'
         ]);
         $this->resetErrorBag();
     }
@@ -84,20 +84,20 @@ class CompraComponent extends Component
     protected function rules()
     {
         return [
-            'proveedor_id' => 'required',
+            'proveedor_id'   => 'required',
             'numero_factura' => 'required|string',
-            'empresa_id' => 'required',
-            'fecha' => 'required|date',
+            'empresa_id'     => 'required',
+            'fecha'          => 'required|date',
         ];
     }
 
     protected function messages()
     {
         return [
-            'proveedor_id.required' => 'El proveedor es requerido',
+            'proveedor_id.required'   => 'El proveedor es requerido',
             'numero_factura.required' => 'El número de factura es requerido',
-            'empresa_id.required' => 'La empresa es requerida',
-            'fecha.required' => 'La fecha de compra es requerida',
+            'empresa_id.required'     => 'La empresa es requerida',
+            'fecha.required'          => 'La fecha de compra es requerida',
         ];
     }
 
@@ -114,6 +114,72 @@ class CompraComponent extends Component
 
     }
 
+    // 🔹 Calcular un detalle completo
+    private function buildDetalle($producto_id, $cantidad, $precio, $descuento, $porc_ivas)
+    {
+
+        $subtotal = ($precio * $cantidad) - $descuento;
+
+        $iva = $subtotal * ($porc_ivas / 100);
+
+        return [
+            'producto_id'   => $producto_id,
+            'cantidad'      => $cantidad,
+            'precio_compra' => $precio,
+            'porc_ivas'     => $porc_ivas,
+            'descuento'     => $descuento,
+            'iva'           => $iva,
+            'subtotal'      => $subtotal,
+        ];
+
+    }
+
+    // 🔹 Agregar detalle
+    public function addDetalle()
+    {
+        if (!$this->producto_id || !$this->cantidad || !$this->precio_compra) return;
+
+        $this->detalles[] = $this->buildDetalle(
+            $this->producto_id,
+            $this->cantidad,
+            $this->precio_compra,
+            $this->detalle_descuento,
+            $this->porc_ivas
+        );
+
+        $this->calcularTotales();
+        $this->reset(['producto_id','cantidad','precio_compra','detalle_descuento']);
+    }
+
+    // 🔹 Recalcular totales al editar tabla
+    public function updatedDetalles($value, $key)
+    {
+        // $key viene como "2.precio_compra" por ejemplo
+        [$index, $campo] = explode('.', $key);
+
+        if (in_array($campo, ['cantidad','precio_compra','descuento','porc_ivas'])) {
+            $d = $this->detalles[$index];
+            $this->detalles[$index] = $this->buildDetalle(
+                $d['producto_id'],
+                $d['cantidad'],
+                $d['precio_compra'],
+                $d['descuento'],
+                $d['porc_ivas']
+            );
+        }
+
+        $this->calcularTotales();
+    }
+
+    // 🔹 Guardar detalles (reutilizable)
+    private function guardarDetalles($compra)
+    {
+        $compra->detalles()->delete();
+        foreach ($this->detalles as $d) {
+            $compra->detalles()->create($d);
+        }
+    }
+
     // 🔹 Calcular detalle temporal
     public function calcularDetalle()
     {
@@ -126,42 +192,15 @@ class CompraComponent extends Component
         $this->detalle_iva = $iva;
 
         return [
-            'producto_id' => $this->producto_id,
-            'cantidad' => $this->cantidad,
-            'precio_compra' => $this->precio_compra,
-            'porc_iva' => $this->porc_ivas,
-            'descuento' => $descuento,
-            'iva' => $iva,
-            'subtotal' => $subtotal ,
-        ];
-        
-    }
-
-    // 🔹 Agregar detalle
-    public function addDetalle()
-    {
-        $this->detalles[] = [
             'producto_id'   => $this->producto_id,
             'cantidad'      => $this->cantidad,
             'precio_compra' => $this->precio_compra,
-            'porc_iva'      => $this->porc_ivas,
-            'descuento'     => $this->detalle_descuento,
-            'iva'           => $this->calcularIva($this->precio_compra, $this->cantidad, $this->porc_ivas),
-            'subtotal'      => $this->calcularSubtotal($this->precio_compra, $this->cantidad, $this->detalle_descuento),
+            'porc_ivas'     => $this->porc_ivas,
+            'descuento'     => $descuento,
+            'iva'           => $iva,
+            'subtotal'      => $subtotal ,
         ];
-
-        $this->reset(['producto_id','cantidad','precio_compra','detalle_descuento','porc_ivas']);
-        $this->calcularTotales();
-    }    
-
-    private function calcularIva($precio, $cantidad, $porc)
-    {
-        return (($precio * $cantidad) * $porc) / 100;
-    }
-
-    private function calcularSubtotal($precio, $cantidad, $descuento)
-    {
-        return ($precio * $cantidad) - $descuento;
+        
     }
 
     // 🔹 Totales
@@ -177,21 +216,35 @@ class CompraComponent extends Component
     public function guardarCompra()
     {
         $compra = Compra::create([
-            'proveedor_id' => $this->proveedor_id,
-            'nombre' => $this->nombre,
+            'proveedor_id'   => $this->proveedor_id,
+            'nombre'         => $this->nombre,
             'numero_factura' => $this->numero_factura,
-            'empresa_id' => $this->empresa_id,
-            'fecha' => $this->fecha,
-            'subtotal' => $this->subtotal,
-            'descuento' => $this->descuento,
-            'porc_iva' => $this->porc_iva,
-            'iva' => $this->iva,
-            'total' => $this->total,
-            'estado' => $this->estado ?? 'ACTIVO' ,
+            'empresa_id'     => $this->empresa_id,
+            'fecha'          => $this->fecha,
+            'subtotal'       => $this->subtotal,
+            'descuento'      => $this->descuento,
+            'porc_iva'       => $this->porc_iva,
+            'iva'            => $this->iva,
+            'total'          => $this->total,
+            'estado'         => $this->estado ?? 'ACTIVO' ,
         ]);
 
         foreach ($this->detalles as $detalle) {
             $compra->detalles()->create($detalle);
+
+            // 🔹 Actualizar stock y precio en producto 
+            $producto = Producto::find($detalle['producto_id']); 
+            if ($producto) { 
+                // Sumar cantidad al stock 
+                $producto->stock = $producto->stock + $detalle['cantidad']; 
+                // Actualizar precio de compra (último precio registrado) 
+                $producto->costo = $detalle['precio_compra']; 
+                // Si quieres promedio ponderado: 
+                // $producto->precio_compra = // (($producto->precio_compra * $producto->stock) + ($d['precio_compra'] * $d['cantidad'])) // / ($producto->stock + $d['cantidad']); 
+                
+                $producto->save(); 
+            }
+            
         }
 
     }
@@ -205,11 +258,15 @@ class CompraComponent extends Component
 
     public function updatedProductoId($value)
     {
+
         $producto = Producto::find($value);
         if ($producto) {
-            $this->precio_compra = $producto->precio_compra;
-            $this->porc_ivas = $producto->iva ? 0 : 15 ;
+
+            //$this->precio_compra = $producto->costo;
+            //$this->porc_det_iva = $producto->iva ? 0 : 15 ;
+
         }
+        
     }
 
     public function updatedCantidad($value)
@@ -239,7 +296,7 @@ class CompraComponent extends Component
                 'producto_id'   => $d->producto_id,
                 'cantidad'      => $d->cantidad,
                 'precio_compra' => $d->precio_compra,
-                'porc_iva'      => $d->porc_iva,
+                'porc_ivas'     => $d->porc_ivas,
                 'descuento'     => $d->descuento,
                 'iva'           => $d->iva,
                 'subtotal'      => $d->subtotal,
@@ -277,22 +334,12 @@ class CompraComponent extends Component
 
     } 
 
-    public function updatedDetalles()
-    {
-        $this->subtotal = collect($this->detalles)->sum('subtotal');
-        $this->descuento = collect($this->detalles)->sum('descuento');
-        $this->iva = collect($this->detalles)->sum('iva');
-        $this->total = $this->subtotal - $this->descuento + $this->iva;
-    }
 
     public function removeDetalle($index)
     {
         unset($this->detalles[$index]);
         $this->detalles = array_values($this->detalles); // reindexar
     }    
-
-
-
 
 }
 

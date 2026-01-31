@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('welfare_checks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lot_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId('pig_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('pig_id')->nullable()->constrained('activovivos')->cascadeOnDelete();
             $table->date('date');
             $table->string('condition'); // ventilación, heridas, cojeras, temperatura
             $table->string('severity')->default('low'); // low, medium, high

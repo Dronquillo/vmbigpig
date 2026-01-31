@@ -3,222 +3,88 @@
 namespace App\Livewire\Farms;
 
 use Livewire\Component;
-
 use Livewire\Attributes\Title;
-use Livewire\Attributes\On;
-use App\Models\Activovivo;
-
-//Traer las tablas de categorias, medidas y empresas
-use App\Models\CategoriaActivo as Categoactivo;
-use App\Models\TablaMedida as Measurement;
-use App\Models\Empresa as Enterprise;
-
 use Livewire\WithPagination;
-use Livewire\WithFileUploads;
+use App\Models\farms as Farm;
 
-#[Title('Cerdos')]
+#[Title('Gestión de Granjas')]
 class FarmComponent extends Component
 {
-
     use WithPagination;
-    use WithFileUploads;
 
-    //propiedades clase
     public $search = '';
+    public $perPage = 10;
     public $totalRegistros = 0;
-    public $cant=5;
 
-    //propiedades modelo
-    public $Id;
-    public $codigo;
-    public $nombre;
-    public $fecha_nacemiento;
-    public $hora_nacimiento;
-    public $numero_camada;
-    public $raza;
-    public $genero;
-    public $peso;
-    public $medida_id;
-    public $estado_salud;
-    public $categoria_id;
-    public $estado;
-    public $empresa_id;    
+    public $Id = 0;
+    public $name,  $location, $owner, $estado = 'activo';
 
     public function render()
     {
+        if ($this->search !== '') $this->resetPage();
 
-        if( $this->search !='' ){
-            $this->resetPage();
+        $query = Farm::orderByDesc('id');
+        if ($this->search) {
+            $query->where('name', 'like', "%{$this->search}%")
+                  ->orWhere('location', 'like', "%{$this->search}%");
         }
+        $farms = $query->paginate($this->perPage);
+        $this->totalRegistros = $farms->total();
 
-        $this->totalRegistros = Activovivo::count();
-
-        $categorias = Categoactivo::All();
-        $medidas = Measurement::All();
-        $empresas = Enterprise::All();
-
-        $activovivos = Activovivo::where('nombre', 'like', '%' . $this->search . '%')
-            ->orderBy('id','desc')
-            ->paginate($this->cant);
-
-        return view('livewire.farms.farm-component',[
-            'activovivos' => $activovivos, 'categorias' => $categorias, 'medidas' => $medidas,
-            'empresas' => $empresas
-        ]);
-
+        return view('livewire.farms.farm-component', compact('farms'));
     }
 
     public function create()
     {
-        $this->Id = 0;
-        $this->reset(['codigo']);
-        $this->reset(['nombre']);
-        $this->reset(['fecha_nacemiento']);
-        $this->reset(['hora_nacimiento']);
-        $this->reset(['numero_camada']);
-        $this->reset(['raza']);
-        $this->reset(['genero']);
-        $this->reset(['peso']);
-        $this->reset(['medida_id']);
-        $this->reset(['categoria_id']);
-        $this->reset(['estado_salud']);
-        $this->reset(['empresa_id']);
-        $this->estado = 'Activo';
+        $this->resetForm();
+        $this->dispatch('open-modal','modalFarm');
+    }
+
+    public function edit($id)
+    {
+        $farm = Farm::findOrFail($id);
+        $this->Id = $farm->id;
+        $this->name = $farm->name;
+        $this->location = $farm->location;
+        $this->owner = $farm->owner;
+        $this->estado = $farm->estado;
+        $this->dispatch('open-modal','modalFarm');
+    }
+
+    public function resetForm()
+    {
+        $this->reset(['Id','name','location','owner','estado']);
         $this->resetErrorBag();
-        $this->dispatch('open-modal','modalFarms');
-        
+    }
+
+    protected function rules()
+    {
+        return [
+            'name' => 'required|string|max:100',
+            'location' => 'nullable|string|max:255',
+            'owner' => 'nullable|string|max:100',
+            'estado' => 'required|string',
+        ];
     }
 
     public function store()
     {
-        $rules = [
-            'codigo' => 'required|min:5',
-            'nombre' => 'required|min:5|max:255|unique:activovivos',
-            'hora_nacimiento' => 'required',
-            'numero_camada' => 'numeric',
-            'raza' => 'required',
-            'genero' => 'required',
-            'peso' => 'required|numeric',
-            'empresa_id' => 'required',  
-        ];
+        $this->validate();
+        Farm::create($this->only(['name','location','owner','estado']));
+        $this->dispatch('close-modal','modalFarm');
+        $this->dispatch('msg','Granja creada exitosamente');
+        $this->resetForm();
+    }
 
-        $this->validate($rules);
-
-        //crear cerdo
-        $activovivos = new Activovivo();
-        $activovivos->codigo = $this->codigo;
-        $activovivos->nombre = $this->nombre;
-        $activovivos->fecha_nacemiento = $this->fecha_nacemiento;
-        $activovivos->hora_nacimiento = $this->hora_nacimiento;
-        $activovivos->numero_camada = $this->numero_camada;
-        $activovivos->raza = $this->raza;
-        $activovivos->genero = $this->genero;
-        $activovivos->peso = $this->peso;
-        $activovivos->medida_id = $this->medida_id;
-        $activovivos->categoria_id = $this->categoria_id;
-        $activovivos->estado_salud = $this->estado_salud;
-        $activovivos->empresa_id = $this->empresa_id;
-        $activovivos->estado = $this->estado;
-        $activovivos->save();
-
-        //actualizar total registros
-        $this->totalRegistros = Activovivo::count();
-
-        //resetear campo
-        $this->codigo = '';
-        $this->nombre = '';
-        $this->fecha_nacemiento = '';
-        $this->hora_nacimiento = '';
-        $this->numero_camada = 0;
-        $this->raza = '';
-        $this->genero = '';
-        $this->peso = 0;
-        $this->categoria_id = 0;
-        $this->medida_id = 0;
-        $this->estado_salud ='';
-        $this->empresa_id = 0;
-        $this->estado = 'Activo';    
-
-        //cerrar modal via browser event
-        $this->dispatch('close-modal','modalFarms');
-        $this->dispatch('msg','Cerdo creado exitosamente');
-
-    }     
-
-
-    public function edit(Activovivo $activovivo)
+    public function update($id)
     {
-        $this->Id = $activovivo->id;
-        $this->codigo = $activovivo->codigo;
-        $this->nombre = $activovivo->nombre;
-        $this->fecha_nacemiento = $activovivo->fecha_nacemiento;
-        $this->hora_nacimiento = $activovivo->hora_nacimiento;
-        $this->numero_camada = $activovivo->numero_camada;
-        $this->raza = $activovivo->raza;
-        $this->genero = $activovivo->genero;    
-        $this->peso = $activovivo->peso;
-        $this->medida_id = $activovivo->medida_id;
-        $this->estado_salud = $activovivo->estado_salud;
-        $this->categoria_id = $activovivo->categoria_id;
-        $this->empresa_id = $activovivo->empresa_id;
-        $this->estado = $activovivo->estado;
+        $this->validate();
+        $farm = Farm::findOrFail($id);
+        $farm->update($this->only(['name','location','owner','estado']));
+        $this->dispatch('close-modal','modalFarm');
+        $this->dispatch('msg','Granja editada exitosamente');
+        $this->resetForm();
+    }
 
 
-        $this->dispatch('open-modal','modalFarms');
-
-    }    
-
-    public function update(Activovivo $activovivo)
-    {
-        $rules = [
-            'nombre' => 'required|min:5|max:255|unique:empresas,id,'.$this->Id,
-            'hora_nacimiento' => 'required',
-            'numero_camada' => 'numeric',
-            'raza' => 'required',
-            'genero' => 'required',
-            'peso' => 'required|numeric',
-            'empresa_id' => 'required',             
-        ];
-
-        $this->validate($rules);
-
-        //actualizar categoria
-        $activovivo->codigo = $this->codigo;
-        $activovivo->nombre = $this->nombre;
-        $activovivo->fecha_nacemiento = $this->fecha_nacemiento;
-        $activovivo->hora_nacimiento = $this->hora_nacimiento;
-        $activovivo->numero_camada = $this->numero_camada;
-        $activovivo->raza = $this->raza;
-        $activovivo->genero = $this->genero;
-        $activovivo->peso = $this->peso;
-        $activovivo->medida_id = $this->medida_id;
-        $activovivo->categoria_id = $this->categoria_id;
-        $activovivo->estado_salud = $this->estado_salud;
-        $activovivo->empresa_id = $this->empresa_id;
-        $activovivo->estado = $this->estado;
-
-        $activovivo->update();
-
-        //cerrar modal via browser event
-        $this->dispatch('close-modal','modalFarms');
-        $this->dispatch('msg','Activo vivo editado exitosamente');
-
-        $this->reset(['codigo']);
-        $this->reset(['nombre']);
-        $this->reset(['fecha_nacemiento']);
-        $this->reset(['hora_nacimiento']);
-        $this->reset(['numero_camada']);
-        $this->reset(['raza']);
-        $this->reset(['genero']);
-        $this->reset(['peso']);
-        $this->reset(['medida_id']);
-        $this->reset(['categoria_id']);
-        $this->reset(['estado_salud']);
-        $this->reset(['empresa_id']);
-        $this->estado = 'Activo';
-
-
-    }  
-
-    
 }

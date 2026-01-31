@@ -1,6 +1,6 @@
 <x-card cardTitle='Detalles de los Activos Vivos'>
         <x-slot:cardTools>  
-            <a href="{{route('farms')}}" class="btn btn-primary">
+            <a href="{{route('pigs')}}" class="btn btn-primary">
                 <i class="fas fa-arrow-circle-left"></i>  Regresar</a>
         </x-slot>
         

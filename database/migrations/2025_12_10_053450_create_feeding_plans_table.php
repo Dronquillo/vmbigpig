@@ -7,24 +7,26 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations. 
      */
     public function up(): void
     {
+
         Schema::create('feeding_plans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lot_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('feed_formula_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('lot_id') ->constrained('lots') ->onDelete('cascade'); 
+            $table->foreignId('formula_id') ->constrained('feed_formulas') ->onDelete('cascade');
             $table->unsignedInteger('day_from');
             $table->unsignedInteger('day_to');
             $table->decimal('ration_per_pig_kg', 8, 3);
             $table->timestamps();
-            $table->index(['lot_id', 'day_from', 'day_to']);
+
         });
     }
 
     /**
      * Reverse the migrations.
+     * //            $table->index(['lot_id', 'day_from', 'day_to']);
      */
     public function down(): void
     {

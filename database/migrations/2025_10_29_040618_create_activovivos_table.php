@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('activovivos', function (Blueprint $table) {
             $table->id();
             $table->string('codigo')->unique();
             $table->string('nombre');
-            $table->date('fecha_nacemiento');
+            $table->date('fecha_nacimiento');
             $table->time('hora_nacimiento')->nullable();
             $table->integer('numero_camada');
             $table->string('color')->nullable();

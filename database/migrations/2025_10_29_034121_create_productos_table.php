@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->text('descripcion')->nullable();
+            $table->decimal('costo', 8, 2);
             $table->decimal('precio', 8, 2);
             $table->decimal('stock',10,2)->default(0);
             $table->decimal('stock_minimo',10,2)->default(0);
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->string('codigo_barras')->unique()->nullable();
             $table->foreignId('categoria_id')->constrained('categorias')->onDelete('cascade');
             $table->string('estado')->default('activo');
+            $table->string('imagen')->nullable();
             $table->timestamps();
         });
     }

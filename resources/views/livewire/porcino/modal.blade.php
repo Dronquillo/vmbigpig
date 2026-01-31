@@ -2,15 +2,26 @@
         <form wire:submit={{$Id==0 ? "store" : "update($Id)"}}>
             <div class="form-row">
 
-                <div class="form-group col-md-5">
+                <div class="form-group col-md-3">
+                    <label for="lot_id">Lote: </label>
+                    <select wire:model='lot_id' class='form-control'>
+                        <option value="">--Seleccione--</option>
+                        @foreach($lotes as $lote)
+                            <option value="{{$lote->id}}">{{$lote->code}}</option>
+                        @endforeach
+                    </select>                    
+                    @error('lot_id') 
+                        <div class="alert alert-danger w-100 mt-2">{{ $message }}</div>
+                    @enderror
+                </div> 
+                <div class="form-group col-md-3">
                     <label for="codigo">Codigo: </label>
                     <input wire:model='codigo' type="text" class="form-control" placeholder="Codigo del Cerdo" id="codigo">
                     @error('codigo') 
                         <div class="alert alert-danger w-100 mt-2">{{ $message }}</div>
                     @enderror
                 </div>
-
-                <div class="form-group col-md-7">
+                <div class="form-group col-md-6">
                     <label for="name">Nombre: </label>
                     <input wire:model='nombre' type="text" class="form-control" placeholder="Nombre del Cerdo" id="name">
                     @error('nombre') 
@@ -19,10 +30,10 @@
                 </div>
 
                 <div class="form-group col-md-3">
-                    <label for="fecha_nacemiento">Fecha nace: </label>
-                    <input wire:model='fecha_nacemiento' type="date" class="form-control" placeholder="Fecha Nacimiento" id="fecha_nacemiento">                    
+                    <label for="fecha_nacimiento">Fecha nace: </label>
+                    <input wire:model='fecha_nacimiento' type="date" class="form-control" placeholder="Fecha Nacimiento" id="fecha_nacemiento">                    
 
-                    @error('fecha_nacemiento') 
+                    @error('fecha_nacimiento') 
                         <div class="alert alert-danger w-100 mt-2">{{ $message }}</div>
                     @enderror
 

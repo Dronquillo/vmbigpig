@@ -106,14 +106,44 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">                           
+            <ul class="nav nav-treeview">   
               <li class="nav-item">
-                <a href="{{route('farms')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <a class="nav-link" href="{{ route('farms') }}">
+                      <i class="fas fa-tractor"></i>
+                      <span>Granjas</span>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('barns') }}">
+                      <i class="fas fa-warehouse nav-icon"></i>
+                      <span>Galpones</span>
+                  </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('lots')}}" class="nav-link">
+                  <i class="far fa-layer-group nav-icon"></i>
+                  <p>Lotes</p>
+                </a>
+              </li>                                      
+              <li class="nav-item">
+                <a href="{{route('pigs')}}" class="nav-link">
+                  <i class="nav-icon fas fa-piggy-bank"></i>
                   <p>Cerdos</p>
                 </a>
               </li>
               <li class="nav-item">
+                  <a href="{{route('personals')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Personal</p>
+                  </a>
+              </li>     
+              <li class="nav-item">
+                  <a href="{{route('categoria-personals')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Categorías de Personal</p>
+                  </a>
+              </li>                       
+              <!-- <li class="nav-item">
                 <a href="{{route('feeding.dashboard')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Alimentación</p>
@@ -137,14 +167,73 @@
                   <p>Bienestar</p>
                 </a>
               </li>
-
               <li class="nav-item">
                 <a href="{{route('feeding.report')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Reporte</p>
                 </a>
-              </li>
+              </li> -->
+            </ul>
+          </li>
 
+          <!-- Alimentacion Y Bienestar -->
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-warehouse"></i>
+              <p>
+                Alimentacion 
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <!-- <li class="nav-item">
+                  <a class="nav-link" href="{{ route('porcino.dashboard') }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <span>Tablero</span>
+                  </a>                
+              </li> -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('formulas') }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <span>Formulas</span>
+                  </a>                
+              </li>              
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('plans') }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <span>Planes</span>
+                  </a>                
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('events') }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <span>Eventos</span>
+                  </a>                
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('weights') }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <span>Registros de peso</span>
+                  </a>                
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('welfare') }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <span>Chequeos</span>
+                  </a>                
+              </li>                
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('partos') }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <span>Partos</span>
+                  </a>                
+              </li>       
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('alerts') }}">
+                      <i class="fas fa-bell nav-icon"></i>
+                      <span>Alertas</span>
+                  </a>                
+              </li>
             </ul>
           </li>
 

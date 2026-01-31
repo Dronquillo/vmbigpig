@@ -5,22 +5,27 @@ namespace App\Livewire\Porcino;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\lots as Lot;
-use App\Models\feed_items as FeedItem;
+use App\Models\Activovivo;
+use App\Models\Producto as FeedItem;
 use App\Models\feeding_events as FeedingEvent;
 use App\Models\weight_records as WeightRecord;
 use App\Models\welfare_checks as WelfareCheck;
 use App\Models\Alert;
-use App\Models\AuditLog;
 use App\Services\GrowthMetrics;
 
-#[Title('Gestion Porcina')]
+#[Title('Gestión Porcina')]
 class PorcinoDashboard extends Component
 {
     public $lotsActivos = 0;
+    public $animalesVivos = 0;
     public $stockTotal = 0;
     public $adgPromedio = 0;
     public $alertasCriticas = 0;
+
     public $alertasPendientes = [];
+    public $ultimoFeedingEvents = [];
+    public $ultimoPesajes = [];
+    public $ultimoWelfareChecks = [];
 
     public function mount()
     {
@@ -30,14 +35,17 @@ class PorcinoDashboard extends Component
     public function cargarMétricas()
     {
         // Lotes activos
-        $this->lotsActivos = Lot::active()->count();
+        $this->lotsActivos = Lot::where('end_date', null)->count();
+
+        // Animales vivos
+        $this->animalesVivos = ActivoVivo::where('estado','activo')->count();
 
         // Stock total de alimentos
         $this->stockTotal = FeedItem::sum('stock');
 
         // ADG promedio de todos los lotes activos
         $adgs = [];
-        foreach (Lot::active()->get() as $lot) {
+        foreach (Lot::where('end_date', null)->get() as $lot) {
             $adgs[] = GrowthMetrics::adgForLot($lot->id);
         }
         $this->adgPromedio = count($adgs) ? round(array_sum($adgs) / count($adgs), 3) : 0;
@@ -47,6 +55,15 @@ class PorcinoDashboard extends Component
 
         // Últimas alertas pendientes
         $this->alertasPendientes = Alert::where('resolved',false)->latest()->take(5)->get();
+
+        // Últimos eventos de alimentación
+        $this->ultimoFeedingEvents = FeedingEvent::latest()->take(5)->get();
+
+        // Últimos registros de peso
+        $this->ultimoPesajes = WeightRecord::latest()->take(5)->get();
+
+        // Últimos chequeos de bienestar
+        $this->ultimoWelfareChecks = WelfareCheck::latest()->take(5)->get();
     }
 
     public function render()
@@ -54,4 +71,5 @@ class PorcinoDashboard extends Component
         return view('livewire.porcino.porcino-dashboard');
     }
 }
+
 

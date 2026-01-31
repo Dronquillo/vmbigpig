@@ -32,6 +32,7 @@ return new class extends Migration
             $table->timestamps();
             $table->index(['model','model_id','action','user_id']);
         });
+        
     }
 
     /**
