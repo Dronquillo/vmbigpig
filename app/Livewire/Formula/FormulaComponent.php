@@ -120,12 +120,6 @@ class FormulaComponent extends Component
         $this->dispatch('msg','Fórmula actualizada exitosamente');
     }
 
-    public function destroy($id)
-    {
-        FeedFormula::findOrFail($id)->delete();
-        $this->dispatch('msg','Fórmula eliminada exitosamente');
-    }
-
     private function resetForm()
     {
         $this->Id = 0;

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FeedFormulaItem extends Model
 {
+    
     protected $table = 'feed_formula_items';
     protected $fillable = ['feed_formula_id','producto_id','cantidad','medida_id','percentage'];
 

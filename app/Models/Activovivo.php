@@ -31,4 +31,5 @@ class Activovivo extends Model
         
     }
 
+    
 }

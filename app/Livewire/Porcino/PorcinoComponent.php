@@ -45,6 +45,7 @@ class PorcinoComponent extends Component
     public $estado;
     public $empresa_id;    
     public $lot_id;
+    public $especie='Porcino';
 
     public function render()
     {
@@ -81,6 +82,7 @@ class PorcinoComponent extends Component
         $this->reset(['numero_camada']);
         $this->reset(['raza']);
         $this->reset(['genero']);
+        $this->reset(['especie']);
         $this->reset(['peso']);
         $this->reset(['medida_id']);
         $this->reset(['categoria_id']);
@@ -96,8 +98,8 @@ class PorcinoComponent extends Component
     public function store()
     {
         $rules = [
-            'codigo' => 'required|min:5',
-            'nombre' => 'required|min:5|max:255|unique:activovivos',
+            'codigo' => 'required|min:1',
+            'nombre' => 'required|min:5|max:255',
             'hora_nacimiento' => 'required',
             'numero_camada' => 'numeric',
             'raza' => 'required',
@@ -118,6 +120,7 @@ class PorcinoComponent extends Component
         $activovivos->numero_camada = $this->numero_camada;
         $activovivos->raza = $this->raza;
         $activovivos->genero = $this->genero;
+        $activovivos->especie = $this->especie;
         $activovivos->peso = $this->peso;
         $activovivos->medida_id = $this->medida_id;
         $activovivos->categoria_id = $this->categoria_id;
@@ -144,6 +147,7 @@ class PorcinoComponent extends Component
         $this->estado_salud ='';
         $this->empresa_id = 0;
         $this->lot_id = 0;
+        $this->especie = 'Porcino';
         $this->estado = 'Activo';    
 
         //cerrar modal via browser event
@@ -164,6 +168,7 @@ class PorcinoComponent extends Component
         $this->raza = $activovivo->raza;
         $this->genero = $activovivo->genero;    
         $this->peso = $activovivo->peso;
+        $this->especie = $activovivo->especie;
         $this->medida_id = $activovivo->medida_id;
         $this->estado_salud = $activovivo->estado_salud;
         $this->categoria_id = $activovivo->categoria_id;
@@ -175,10 +180,12 @@ class PorcinoComponent extends Component
 
     }    
 
+    //|unique:empresas,id,'.$this->Id
+
     public function update(Activovivo $activovivo)
     {
         $rules = [
-            'nombre' => 'required|min:5|max:255|unique:empresas,id,'.$this->Id,
+            'nombre' => 'required|min:5|max:255',
             'hora_nacimiento' => 'required',
             'numero_camada' => 'numeric',
             'raza' => 'required',
@@ -205,6 +212,7 @@ class PorcinoComponent extends Component
         $activovivo->empresa_id = $this->empresa_id;
         $activovivo->lot_id = $this->lot_id;
         $activovivo->estado = $this->estado;
+        $activovivo->especie = $this->especie;
 
         $activovivo->update();
 
@@ -225,6 +233,7 @@ class PorcinoComponent extends Component
         $this->reset(['estado_salud']);
         $this->reset(['empresa_id']);
         $this->reset(['lot_id']);
+        $this->reset(['especie']);
         $this->estado = 'Activo';
 
 

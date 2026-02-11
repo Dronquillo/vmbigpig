@@ -9,4 +9,5 @@ class Empresa extends Model
 {
     /** @use HasFactory<\Database\Factories\EmpresaFactory> */
     use HasFactory;
+    
 }

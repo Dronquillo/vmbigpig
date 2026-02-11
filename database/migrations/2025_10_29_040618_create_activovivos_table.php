@@ -20,7 +20,7 @@ return new class extends Migration
             $table->time('hora_nacimiento')->nullable();
             $table->integer('numero_camada');
             $table->string('color')->nullable();
-            $table->string('especie');
+            $table->string('especie')->nullable();
             $table->string('raza')->nullable();
             $table->string('genero')->default('masculino');
             $table->decimal('peso', 8, 2)->nullable();

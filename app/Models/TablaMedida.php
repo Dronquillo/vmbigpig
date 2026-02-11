@@ -9,4 +9,5 @@ class TablaMedida extends Model
 {
     /** @use HasFactory<\Database\Factories\TablaMedidaFactory> */
     use HasFactory;
+    
 }

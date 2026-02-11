@@ -9,7 +9,7 @@
 <script src="{{asset('dist/js/adminlte.js')}}"></script>
 
 <!-- PLUGINS -->
-
+<script src="//unpkg.com/alpinejs" defer></script>
 <!-- SweetAlert -->
 <script src="{{asset('plugins/sweetalert2/sweetalert2.js')}}"></script>
 

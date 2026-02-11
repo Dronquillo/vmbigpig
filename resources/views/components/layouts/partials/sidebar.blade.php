@@ -186,54 +186,14 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <!-- <li class="nav-item">
-                  <a class="nav-link" href="{{ route('porcino.dashboard') }}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <span>Tablero</span>
-                  </a>                
-              </li> -->
+
               <li class="nav-item">
-                  <a class="nav-link" href="{{ route('formulas') }}">
+                  <a class="nav-link" href="{{ route('feeding') }}">
                       <i class="far fa-circle nav-icon"></i>
-                      <span>Formulas</span>
+                      <span>Alimentación</span>
                   </a>                
-              </li>              
-              <li class="nav-item">
-                  <a class="nav-link" href="{{ route('plans') }}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <span>Planes</span>
-                  </a>                
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{{ route('events') }}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <span>Eventos</span>
-                  </a>                
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{{ route('weights') }}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <span>Registros de peso</span>
-                  </a>                
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{{ route('welfare') }}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <span>Chequeos</span>
-                  </a>                
-              </li>                
-              <li class="nav-item">
-                  <a class="nav-link" href="{{ route('partos') }}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <span>Partos</span>
-                  </a>                
-              </li>       
-              <li class="nav-item">
-                  <a class="nav-link" href="{{ route('alerts') }}">
-                      <i class="fas fa-bell nav-icon"></i>
-                      <span>Alertas</span>
-                  </a>                
-              </li>
+              </li> 
+           
             </ul>
           </li>
 

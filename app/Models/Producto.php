@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\CompraDetalle;
-use App\Models\feed_formulas_items as FeedFormulaItem;     
+//use App\Models\feed_formulas_items as FeedFormulaItem;
+use App\Models\FeedFormulaItem;
 
 use Illuminate\Support\Facades\Storage;
 

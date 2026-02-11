@@ -12,5 +12,6 @@ class FeedFormula extends Model
     {
         return $this->hasMany(FeedFormulaItem::class, 'feed_formula_id');
     }
+    
 }
 
