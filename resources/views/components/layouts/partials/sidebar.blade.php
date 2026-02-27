@@ -188,13 +188,14 @@
             <ul class="nav nav-treeview">
 
               <li class="nav-item">
-                  <a class="nav-link" href="{{ route('feeding') }}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <span>Alimentación</span>
-                  </a>                
-              </li> 
-           
+                  <a class="nav-link" href="{{ route('control.index') }}">
+                      <i class="fas fa-notes-medical"></i> 
+                      <span>Control de Cerdos</span>
+                  </a>
+              </li>
+
             </ul>
+            
           </li>
 
           <!-- Administración -->

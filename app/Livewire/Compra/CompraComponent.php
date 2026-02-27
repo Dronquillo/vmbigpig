@@ -109,6 +109,7 @@ class CompraComponent extends Component
         $this->guardarCompra();
 
         $this->totalRegistros = Compra::count();
+        
         $this->dispatch('close-modal','modalCompra');
         $this->dispatch('msg','Compra creada exitosamente');
 

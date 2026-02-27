@@ -35,17 +35,17 @@ class PorcinoDashboard extends Component
     public function cargarMétricas()
     {
         // Lotes activos
-        $this->lotsActivos = Lot::where('end_date', null)->count();
+        $this->lotsActivos = Lot::where('status','activo')->count();
 
         // Animales vivos
-        $this->animalesVivos = ActivoVivo::where('estado','activo')->count();
+        $this->animalesVivos = ActivoVivo::where('estado','Activo')->count();
 
         // Stock total de alimentos
         $this->stockTotal = FeedItem::sum('stock');
 
         // ADG promedio de todos los lotes activos
         $adgs = [];
-        foreach (Lot::where('end_date', null)->get() as $lot) {
+        foreach (Lot::where('status','activo')->get() as $lot) {
             $adgs[] = GrowthMetrics::adgForLot($lot->id);
         }
         $this->adgPromedio = count($adgs) ? round(array_sum($adgs) / count($adgs), 3) : 0;

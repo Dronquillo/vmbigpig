@@ -4,13 +4,16 @@
   <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
+  <!-- SweetAlert -->
+  <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.css') }}">
+  <!-- iCheck Bootstrap -->
+  <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  <!-- 
+  <link rel="stylesheet" href="{{asset('css/app.css')}}"> -->
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
-  <!-- SweetAlert -->
-  <link rel="stylesheet" href="{{asset('plugins/sweetalert2/sweetalert2.css')}}">
-  <!-- Icheck Bootstrap -->
-  <link rel="stylesheet" href="{{asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
   
-
+<!-- Livewire Styles --> 
+ @livewireStyles
 
   

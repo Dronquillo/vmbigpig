@@ -14,4 +14,10 @@ class Personal extends Model
     
     public function categoria() { return $this->belongsTo(CategoriaPersonal::class, 'cargo_id'); }
 
+    public function cargo()
+    {
+        return $this->belongsTo(CategoriaPersonal::class, 'cargo_id');
+    }
+
+
 }

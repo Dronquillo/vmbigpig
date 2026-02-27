@@ -19,6 +19,7 @@ class LotComponent extends Component
     public $search = '';
     public $perPage = 10;
     public $totalRegistros = 0;
+    public $statusFilter = '';
 
     // Form
     public $Id = 0;
@@ -42,12 +43,18 @@ class LotComponent extends Component
         if ($this->search !== '') $this->resetPage();
 
         $query = Lot::with('barn')->orderByDesc('id');
+
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('code', 'like', "%{$this->search}%")
                   ->orWhereHas('barn', fn($b) => $b->where('name', 'like', "%{$this->search}%"));
             });
         }
+
+        if ($this->statusFilter !== '') { 
+            $query->where('status', $this->statusFilter); 
+        }
+
         $lots = $query->paginate($this->perPage);
         $this->totalRegistros = $lots->total();
 
@@ -71,13 +78,18 @@ class LotComponent extends Component
         $this->Id            = $lot->id;
         $this->barn_id       = $lot->barn_id;
         $this->code          = $lot->code;
-        $this->start_date    = optional($lot->start_date)->format('Y-m-d');
-        $this->end_date      = optional($lot->end_date)?->format('Y-m-d');
+        // $this->start_date    = optional($lot->start_date)->format('Y-m-d');
+        // $this->end_date      = optional($lot->end_date)?->format('Y-m-d');
+
+        $this->start_date = $lot->start_date?->format('Y-m-d');
+        $this->end_date   = $lot->end_date?->format('Y-m-d');
+
         $this->initial_count = $lot->initial_count;
         $this->current_count = $lot->current_count;
 
         $this->dispatch('open-modal', 'modalLot');
         $this->loadPigPickers($lot->id);
+
     }
 
     public function resetForm()
@@ -227,7 +239,16 @@ class LotComponent extends Component
     public function closeLot($id)
     {
         $lot = Lot::findOrFail($id);
+        $lot->update(['status' => 'cerrado']);
         $lot->update(['end_date' => now()->toDateString()]);
         $this->dispatch('msg', 'Lote cerrado');
     }
+
+    public function reopenLot($id) 
+    { 
+        $lot = Lot::findOrFail($id); 
+        $lot->update(['status' => 'activo']); 
+        $this->dispatch('msg', 'Lote reabierto exitosamente'); 
+    }
+
 }

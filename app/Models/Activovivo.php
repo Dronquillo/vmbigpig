@@ -16,7 +16,7 @@ class Activovivo extends Model
 
     protected $fillable = [
         'codigo','nombre','fecha_nacimiento','hora_nacimiento','numero_camada',
-        'color','especie','raza','genero','peso','medida_id','estado_salud',
+        'color','especie','raza','genero','peso','medida_id','estado_salud', 'lot_id',
         'categoria_id','empresa_id','estado'
     ];
 
@@ -31,5 +31,4 @@ class Activovivo extends Model
         
     }
 
-    
 }

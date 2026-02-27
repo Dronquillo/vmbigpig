@@ -132,7 +132,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/lotes', LotComponent::class)->name('lots');
     Route::get('/galpones', BarnComponent::class)->name('barns');
 
-    Route::get('/feeding', \App\Livewire\Feeding\FeedingDashboardComponent::class)->name('feeding');
+    //Route::get('/feeding', \App\Livewire\Feeding\FeedingDashboardComponent::class)->name('feeding');
+    
+    Route::get('/control', \App\Livewire\Control\ControlComponent::class)->name('control.index');
+
 
         // Route::get('/plans', FeedingPlanComponent::class)->name('plans'); 
         // Route::get('/events', FeedingEventComponent::class)->name('events'); 

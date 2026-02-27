@@ -15,11 +15,12 @@ use App\Models\TablaPartos as tabla_partos;
 
 class lots extends Model
 {
-    /** @use HasFactory<\Database\Factories\LotsFactory> */
+    /** @use HasFactory<\Database\Factories\LotsFactory> */ 
     use HasFactory;
+    
     protected $table = 'lots';
 
-    protected $fillable = ['barn_id','code','start_date','end_date','initial_count','current_count'];
+    protected $fillable = ['barn_id','code','start_date','end_date','initial_count','current_count', 'status'];
 
     protected $casts = ['start_date'=>'date','end_date'=>'date'];
 

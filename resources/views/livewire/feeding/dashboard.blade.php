@@ -11,10 +11,10 @@
         </div>
 
         <div class="mt-3">
-            <button wire:click="cargarInformacion" class="btn btn-primary" @disabled(!$lot_id)>
+            <button wire:click="cargarInformacion" class="btn btn-primary" {{ !$lot_id ? 'disabled' : '' }}>
                 Mostrar Información
             </button>
-        </div>
+        </div> 
 
         @if($mostrarDashboard)
             <ul class="nav nav-tabs mt-4">

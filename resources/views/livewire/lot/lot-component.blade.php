@@ -10,8 +10,15 @@
             <div class="col-md-4">
                 <input type="text" class="form-control" placeholder="Buscar por código/galpón" wire:model.debounce.500ms="search">
             </div>
+            <div class="col-md-4">
+                <select class="form-control" wire:model="statusFilter">
+                    <option value="">-- Todos los estados --</option>
+                    <option value="activo">Activo</option>
+                    <option value="cerrado">Cerrado</option>
+                </select>
+            </div>
         </div>
-
+        
         <x-table>
             <x-slot:thead>
                 <th>Id</th>
@@ -21,6 +28,7 @@
                 <th>Cierre</th>
                 <th>Inicial</th>
                 <th>Actual</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </x-slot:thead>
 
@@ -33,30 +41,38 @@
                     <td>{{ $lot->end_date?->format('Y-m-d') ?? '—' }}</td>
                     <td>{{ $lot->initial_count }}</td>
                     <td>{{ $lot->current_count }}</td>
+                    <td>{{ $lot->status }}</td>
                     <td>
                         <a href="#" wire:click='edit({{ $lot->id }})' class="btn btn-sm btn-info" title="Editar">
                             <i class="far fa-edit"></i>
                         </a>
-                        <a href="#" wire:click='closeLot({{ $lot->id }})' class="btn btn-sm btn-warning" title="Cerrar Lote">
-                            <i class="fas fa-lock"></i>
-                        </a>
+                        @if($lot->status === 'activo')
+                            <a href="#" wire:click='closeLot({{ $lot->id }})' class="btn btn-sm btn-warning" title="Cerrar Lote">
+                                <i class="fas fa-lock"></i>
+                            </a>
+                        @else
+                            <a href="#" wire:click='reopenLot({{ $lot->id }})' class="btn btn-sm btn-success" title="Reabrir Lote">
+                                <i class="fas fa-unlock"></i>
+                            </a>
+                        @endif                        
                         <a wire.click="$dispatch('delete',{id: {{ $lot->id }}, eventName:'destroyLot'})" class="btn btn-sm btn-danger" title="Eliminar">
                             <i class="far fa-trash-alt"></i>
                         </a>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="8">No hay registros</td></tr>
+                <tr><td colspan="9">No hay registros</td></tr>
             @endforelse
         </x-table>
 
         <x-slot:cardFooter>
             {{ $lots->links() }}
         </x-slot:cardFooter>
+
     </x-card>
 
     <x-modal modalId="modalLot" modalTitle="Lote">
-        <form wire:submit={{ $Id==0 ? "store" : "update($Id)" }}>
+        <form wire:submit.prevent="{{ $Id==0 ? 'store' : 'update('.$Id.')' }}">
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label>Galpón</label>
@@ -95,7 +111,8 @@
 
                 <div class="form-group col-md-4">
                     <label>Conteo actual</label>
-                    <input type="number" class="form-control" value="{{ $current_count }}" readonly>
+
+                    <input type="number" class="form-control" wire:model="current_count" readonly>
                 </div>
             </div>
 

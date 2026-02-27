@@ -52,7 +52,7 @@
 
     <!-- REQUIRED SCRIPTS -->
     @include('components.layouts.partials.scripts')
-
+    @livewireScripts
     <script>
         document.addEventListener('livewire:init',()=>{
             Livewire.on('close-modal',(idModal)=>{
